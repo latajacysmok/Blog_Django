@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8" />
+	{% block head %}
+	{% endblock %}
+</head>
+<body>
+	<div style="float:right; border: 1px solid black; padding: 5px; ">
+		
+		{% if not user.is_authenticated %}
+			<p><a href="{% url 'login' %}">Zaloguj się</a></p>
+		{% else %}
+			<p>Witaj, <strong>{{ user.username }}</strong>.</p>
+			<p><a href="{% url 'index' %}">Strona glowna</a></p>
+			<p><a href="{% url 'add_new_post' %}">Dodaj nowy post</a></p>
+			<p><a href="{% url 'logout' %}">Wyloguj się</a></p>
+		{% endif %}
+	</div>
+
+	{% block content %}
+	{% endblock %}
+	
+</body>
+</html>

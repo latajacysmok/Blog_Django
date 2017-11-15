@@ -1,0 +1,24 @@
+{% extends 'blog/base.html' %}
+
+{% block head %}
+	<title>Strona glowna</title>
+{% endblock %}
+
+{% block content %}
+	<h1>Najnowsze posty na naszej stronie</h1>
+	{% for post in posts %}
+		<div>
+			<h2>{{ post.title }}</h2>
+			<h4>Opublikowany  {{ post.publish_date }} 
+	 			przez <a href="{% url 'user_name' post.user.username %}">{{ post.user.username }}</h4></a>
+			<p> {{ post.content }}</p>
+			{% if post.tags %}
+				<p> Tagi: 
+					{% for tag in post.tags %}
+						<a href="{% url 'tag_view' tag.name %}">#{{ tag.name }}</a>
+					{% endfor %}
+				</p>
+			{% endif %}
+		</div>
+	{% endfor %}
+{% endblock %}
