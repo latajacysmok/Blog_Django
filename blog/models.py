@@ -5,10 +5,11 @@ class Post(models.Model):
 	title  = models.CharField(max_length=200)
 	content = models.CharField(max_length=10000)
 	publish_date = models.DateField()
+	edit_date	= models.DateField(null=True)
 	# relacja 1 do wielu
 	user = models.ForeignKey(User)
 	class Meta:
-		ordering = ['publish_date']
+		ordering = ['-publish_date']
 
 	def __str__(self):
 		return "Tytuł postu: " + self.title + "\n Treść: " + self.content[:self.content.find('.')] + "..." \

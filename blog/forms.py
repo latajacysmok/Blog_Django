@@ -4,7 +4,6 @@ from .models import Post, Tag
 class PostForm(forms.Form):
 	def __init__(self, *args, **kwargs):
 		super(PostForm, self).__init__(*args, **kwargs)
-		CHOICES = (('Polityka', 'Polityka'), )
 		choices = tuple([(tag.name, tag.name) for tag in Tag.objects.all()])
 		self.fields['tags'] = forms.MultipleChoiceField(
 			widget=forms.CheckboxSelectMultiple,

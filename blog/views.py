@@ -1,11 +1,12 @@
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, Http404
 import datetime
 from .models import Post, Tag, PostToTag, User
 from .forms import PostForm
-# Create your views here.
-def index(request, page=1):
-	print(page)
+from project.settings import POSTS_PER_PAGE
+
+def index(request, page='1'):
+	page = int(page)
 	posts = Post.objects.all()
 	for post in posts:
 		post.tags = []
@@ -14,8 +15,17 @@ def index(request, page=1):
 		for post in posts:
 			if ptt.post == post:
 				post.tags.append(ptt.tag)
+	startPost = (page-1) * POSTS_PER_PAGE
+	endPost = page * POSTS_PER_PAGE
+	if startPost > len(posts):
+		raise Http404
 	context = {
-		'posts' : posts
+		'posts' : posts[startPost:endPost],
+		'page' : page,
+		'isFirst': (page == 1),
+		'isLast': endPost >= len(posts),
+		'nextPage': page+1,
+		'prevPage': page-1
 	}
 	return render(request, 'blog/index.html', context)
 
@@ -39,6 +49,28 @@ def add_new_post(request):
 		"form": form
 	}
 	return render(request, 'blog/add_new_post.html', context)
+
+def edit_post(request, id):
+	id = int(id)
+	post = Post.objects.get(id=id)
+	if request.method == 'POST':
+		form = PostForm(request.POST)
+		if form.is_valid():
+			post.title = form.cleaned_data['title'] 
+			post.content = form.cleaned_data['content']
+			post.edit_date = datetime.datetime.now()
+			tags = form.cleaned_data['tags']
+			post.save()
+			# todo: tagi
+			return HttpResponseRedirect('/')
+	form = PostForm(initial={
+		'title': post.title,
+		'content': post.content
+	})
+	context = {
+		"form": form
+	}
+	return render(request, 'blog/edit_post.html', context)
 
 def tag_view(request, name):
 	tag = Tag.objects.get(name=name)

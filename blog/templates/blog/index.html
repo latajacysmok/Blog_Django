@@ -10,7 +10,14 @@
 		<div>
 			<h2>{{ post.title }}</h2>
 			<h4>Opublikowany  {{ post.publish_date }} 
-	 			przez <a href="{% url 'user_name' post.user.username %}">{{ post.user.username }}</h4></a>
+				{% if post.edit_date %}
+				, edytowany ostatnio {{ post.edit_date }}
+				{% endif %}
+	 			przez <a href="{% url 'user_name' post.user.username %}">{{ post.user.username }}<a/>
+	 			{% if post.user.username == user.username %}
+	 				 | <a href="{% url 'edit_post' post.id %}">edytuj</a>
+	 			{% endif %}
+	 		</h4>
 			<p> {{ post.content }}</p>
 			{% if post.tags %}
 				<p> Tagi: 
@@ -21,4 +28,15 @@
 			{% endif %}
 		</div>
 	{% endfor %}
+	<div id="page_select" style="text-align: center; font-size: 20px;">
+		<div>
+			{% if not isFirst %}
+				<a href="{% url 'index' prevPage %}"> << </a>
+			{% endif %}
+			{{ page }}
+			{% if not isLast %}
+				<a href="{% url 'index' nextPage %}"> >> </a> 
+			{% endif %}
+		</div>
+	</div>
 {% endblock %}
