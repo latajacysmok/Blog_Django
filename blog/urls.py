@@ -8,6 +8,7 @@ urlpatterns = [
     url(r'^(?P<page>\d+)', views.index, name="index"),
     url(r'^login/$', login, name="login"),
     url(r'^logout/$', logout, name="logout"),
+    url(r'^signup/$', views.signup, name="signup"),
     url(r'^add_new_post/$', views.add_new_post, name="add_new_post"),
     url(r'^edit_post/(?P<id>\d+)$', views.edit_post, name="edit_post"),
     url(r'^tag/(?P<name>\w+)/$', views.tag_view, name="tag_view"),

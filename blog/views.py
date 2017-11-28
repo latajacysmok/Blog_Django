@@ -2,10 +2,11 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 import datetime
 from .models import Post, Tag, PostToTag, User
-from .forms import PostForm
+from .forms import PostForm, OurSignupForm
 from project.settings import POSTS_PER_PAGE
 #from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
+from django.contrib.auth import authenticate, login
 
 def index(request, page='1'):
 	page = int(page)
@@ -69,7 +70,8 @@ def edit_post(request, id):
 			return HttpResponseRedirect('/')
 	form = PostForm(initial={
 		'title': post.title,
-		'content': post.content
+		'content': post.content,
+		'tags': [(ptt, ptt) for ptt in PostToTag.objects.filter(post=post).values_list('tag', flat=True)]
 	})
 	context = {
 		"form": form
@@ -104,3 +106,24 @@ def user_name(request, name):
 
 def post_view(request,name):
 	return render(request, 'blog/post_view.html')
+
+def signup(request):
+	if request.method == 'POST':
+		form = OurSignupForm(request.POST)
+		if form.is_valid():
+			form.save()
+			username = form.cleaned_data['username']
+			password = form.cleaned_data['password1']
+			email = form.cleaned_data['email']
+			# user = User(username=username, password=password, email=email)
+			# user.save()
+			user = authenticate(username=username, password=password)
+			login(request, user)
+			return HttpResponseRedirect('/')
+
+	form = OurSignupForm()
+	context = {
+		'form': form
+	}
+	return render(request, 'registration/signup.html', context)
+

@@ -9,7 +9,7 @@
 	{% for post in posts %}
 		<div>
 			<h2>{{ post.title }}</h2>
-			<h4>Opublikowany  {{ post.publish_date }} 
+			<h4>Opublikowany  {{ post.publish_date }}
 				{% if post.edit_date %}
 				, edytowany ostatnio {{ post.edit_date }}
 				{% endif %}
