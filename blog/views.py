@@ -4,6 +4,8 @@ import datetime
 from .models import Post, Tag, PostToTag, User
 from .forms import PostForm
 from project.settings import POSTS_PER_PAGE
+#from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib import messages
 
 def index(request, page='1'):
 	page = int(page)
@@ -25,7 +27,7 @@ def index(request, page='1'):
 		'isFirst': (page == 1),
 		'isLast': endPost >= len(posts),
 		'nextPage': page+1,
-		'prevPage': page-1
+		'prevPage': page-1,
 	}
 	return render(request, 'blog/index.html', context)
 
@@ -43,7 +45,9 @@ def add_new_post(request):
 				tag = Tag.objects.get(name=name)
 				ptt = PostToTag(tag=tag, post=post)
 				ptt.save()
+			messages.success(request, 'Utworzył się nowy post o tytule {}'.format(title)) # wiadomość o nowym poście
 			return HttpResponseRedirect('/')
+
 	form = PostForm()
 	context = {
 		"form": form

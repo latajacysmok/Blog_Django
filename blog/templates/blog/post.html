@@ -1,6 +1,11 @@
 <div>
 	<h2>{% block title %} {% endblock %}</h2>
-	<h4>Opublikowany  {% block publish_date %} {% endblock %}
+	<h4>Opublikowany
+		{% if not edit_post %}
+			{% block publish_date %} {% endblock %}
+		{% else %}
+			{% block post.edit_date %} {% endblock %}
+		{% endif %}
 			przez <a href="{% url 'user_name' post.user.username %}">{{ post.user.username }}</h4></a>
 	<p> {{ post.content }}</p>
 	<p> Tagi: 
