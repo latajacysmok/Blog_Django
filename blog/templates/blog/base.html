@@ -4,28 +4,57 @@
 	<meta charset="UTF-8" />
 	{% block head %}
 	{% endblock %}
+	{% load static %}
+	<link rel=stylesheet type="text/css" href="{% static 'blog/style.css' %}">
+	<link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet"> 
 </head>
 <body>
-	{% if messages %}
-  			<ul class="messages">
-    			{% for message in messages %}
-      				<li class="{{ message.tags }}">{{ message }}</li>
-    			{% endfor %}
- 		 	</ul>
-	{% endif %}
-	<div style="float:right; border: 1px solid black; padding: 5px; ">
-		{% if not user.is_authenticated %}
-			<p><a href="{% url 'login' %}">Zaloguj się</a></p>
-		{% else %}
-			<p>Witaj, <strong>{{ user.username }}</strong>.</p>
-			<p><a href="{% url 'index' %}">Strona glowna</a></p>
-			<p><a href="{% url 'add_new_post' %}">Dodaj nowy post</a></p>
-			<p><a href="{% url 'logout' %}">Wyloguj się</a></p>
-		{% endif %}
+	<div id="header">
+		<div id="headerContent">
+			<h1> Blog Maksyma </h1>
+			<span id="topmenu">
+				<ul>
+				{% if not user.is_authenticated %}
+					<li><a href="{% url 'login' %}">Zaloguj się</a></li>
+				{% else %}
+					
+					<li><a href="{% url 'index' %}">Strona glowna</a></li>
+					<li><a href="{% url 'add_new_post' %}">Dodaj nowy post</a></li>
+					<li><a href="{% url 'logout' %}">Wyloguj się</a></li>
+				{% endif %}
+			</ul>
+			</span>
+		</div>
+		
+	</div>
+	<div id="wrapper">
+		
+		<div id="menu">
+			{% if user.is_authenticated %}
+			<div id="hello">Witaj, <strong>{{ user.username }}</strong>.</div>
+			{% endif %}
+			<ul>
+				{% if not user.is_authenticated %}
+					<li><a href="{% url 'login' %}">Zaloguj się</a></li>
+				{% else %}
+					
+					<li><a href="{% url 'index' %}">Strona glowna</a></li>
+					<li><a href="{% url 'add_new_post' %}">Dodaj nowy post</a></li>
+					<li><a href="{% url 'logout' %}">Wyloguj się</a></li>
+				{% endif %}
+			</ul>
+		</div>
+
+		<div id="content">
+			{% block content %}
+			{% endblock %}
+		</div>
 	</div>
 
-	{% block content %}
-	{% endblock %}
-	
+	<div id="footer">
+			<div id="footerContent">
+				Copyright by Maksym
+			</div>
+		</div>
 </body>
 </html>

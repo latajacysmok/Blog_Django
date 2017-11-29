@@ -1,0 +1,23 @@
+#pageSelect {
+	text-align: center;
+	margin-left: 100px;
+	color: red;
+	font-size: 120%;
+}
+
+#pageSelect a {
+	text-decoration: none;
+	color: black;
+}
+
+h4 {
+	font-size: 90%;
+}
+
+.post {
+	border-bottom: 1px solid black;
+}
+
+.post:last-child {
+	border-bottom: none;
+}
