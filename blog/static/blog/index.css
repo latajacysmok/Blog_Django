@@ -15,9 +15,31 @@ h4 {
 }
 
 .post {
-	border-bottom: 1px solid black;
+	border-bottom: 1px dotted #0066CC;
 }
+
+.post h2 {
+    color: #0066CC;
+    }
+
+.post h4 a {
+    color: #003366;
+    }
 
 .post:last-child {
 	border-bottom: none;
 }
+
+#headerContent h1 {
+    color: #000066;
+    text-decoration: bold;
+    }
+
+#menu {
+    padding: 5px 10px;
+    }
+
+
+#menu ul {
+    text-align: right;
+        }
