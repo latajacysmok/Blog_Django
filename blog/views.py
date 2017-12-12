@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 import datetime
-from .models import Post, Tag, PostToTag, User
+from .models import Post, Tag, User
 from .forms import PostForm, OurSignupForm
 from project.settings import POSTS_PER_PAGE
 #from django.contrib.messages.views import SuccessMessageMixin
@@ -11,13 +11,6 @@ from django.contrib.auth import authenticate, login
 def index(request, page='1'):
 	page = int(page)
 	posts = Post.objects.all()
-	for post in posts:
-		post.tags = []
-	ptts = PostToTag.objects.all()
-	for ptt in ptts:
-		for post in posts:
-			if ptt.post == post:
-				post.tags.append(ptt.tag)
 	startPost = (page-1) * POSTS_PER_PAGE
 	endPost = page * POSTS_PER_PAGE
 	if startPost > len(posts):
@@ -44,8 +37,6 @@ def add_new_post(request):
 			post.save()
 			for name in tags:
 				tag = Tag.objects.get(name=name)
-				ptt = PostToTag(tag=tag, post=post)
-				ptt.save()
 			messages.success(request, 'Utworzył się nowy post o tytule {}'.format(title)) # wiadomość o nowym poście
 			return HttpResponseRedirect('/')
 
@@ -81,13 +72,6 @@ def edit_post(request, id):
 def tag_view(request, name):
 	tag = Tag.objects.get(name=name)
 	posts = [ptt.post for ptt in PostToTag.objects.filter(tag=tag)]
-	for post in posts:
-		post.tags = []
-	ptts = PostToTag.objects.all()
-	for ptt in ptts:
-		for post in posts:
-			if ptt.post == post:
-				post.tags.append(ptt.tag)
 	context = {
 		'posts' : posts,
 		'tagname' : tag.name

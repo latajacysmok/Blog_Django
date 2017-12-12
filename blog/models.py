@@ -1,13 +1,21 @@
 from django.db import models
 from django.contrib.auth.models import User
+import datetime
+
+class Tag(models.Model):
+	name = models.CharField(max_length=200)
+
+	def __str__(self):
+		return self.name
 
 class Post(models.Model):
 	title  = models.CharField(max_length=200)
 	content = models.CharField(max_length=10000)
-	publish_date = models.DateField()
+	publish_date = models.DateField(default= datetime.datetime.now)
 	edit_date	= models.DateField(null=True)
 	# relacja 1 do wielu
 	user = models.ForeignKey(User)
+	tags = models.ManyToManyField(Tag)
 	class Meta:
 		ordering = ['-publish_date']
 
@@ -15,21 +23,7 @@ class Post(models.Model):
 		return "Tytuł postu: " + self.title + "\n Treść: " + self.content[:self.content.find('.')] + "..." \
 		+ "\nData: " + self.publish_date.strftime("%d.%m.%Y") + "\nAutor:" + self.user.username
 
-class Tag(models.Model):
-	name = models.CharField(max_length=200)
 
-	def __str__(self):
-		return "Tag o nazwie " + self.name
-
-class PostToTag(models.Model):
-	post = models.ForeignKey(Post)
-	tag = models.ForeignKey(Tag)
-
-	class Meta:
-		unique_together = ('post', 'tag', )
-
-	def __str__(self):
-		return self.post.__str__() + " : " + self.tag.__str__()
 
 # class Profile(models.Model):
 # 	user = models.OneToOneField(User, cascade=True)
