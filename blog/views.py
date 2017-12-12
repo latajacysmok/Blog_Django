@@ -30,13 +30,12 @@ def add_new_post(request):
 		form = PostForm(request.POST)
 		if form.is_valid():
 			title = form.cleaned_data['title']
-			content = form.cleaned_data['content']
 			tags = form.cleaned_data['tags']
-			publish_date = datetime.datetime.now()
-			post = Post(title=title, content=content, publish_date=publish_date, user=request.user)
+			post = form.save(commit=False)
+			post.user = request.user
 			post.save()
-			for name in tags:
-				tag = Tag.objects.get(name=name)
+			post.tags.add(*tags)
+			post.save()
 			messages.success(request, 'Utworzył się nowy post o tytule {}'.format(title)) # wiadomość o nowym poście
 			return HttpResponseRedirect('/')
 
@@ -56,13 +55,15 @@ def edit_post(request, id):
 			post.content = form.cleaned_data['content']
 			post.edit_date = datetime.datetime.now()
 			tags = form.cleaned_data['tags']
+			post.tags.clear()
+			post.tags.add(*tags)
 			post.save()
 			# todo: tagi
 			return HttpResponseRedirect('/')
 	form = PostForm(initial={
 		'title': post.title,
 		'content': post.content,
-		'tags': [(ptt, ptt) for ptt in PostToTag.objects.filter(post=post).values_list('tag', flat=True)]
+		'tags': post.tags.all()
 	})
 	context = {
 		"form": form
