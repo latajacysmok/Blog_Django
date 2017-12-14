@@ -1,7 +1,7 @@
 #pageSelect {
 	text-align: center;
 	margin-left: 100px;
-	color: red;
+	color: #009999;
 	font-size: 120%;
 }
 
@@ -20,11 +20,12 @@ h4 {
 
 .post h2 {
     color: #0066CC;
-    }
+}
 
 .post h4 a {
     color: #003366;
-    }
+}
+
 
 .post:last-child {
 	border-bottom: none;
@@ -33,13 +34,36 @@ h4 {
 #headerContent h1 {
     color: #000066;
     text-decoration: bold;
-    }
+}
 
 #menu {
     padding: 5px 10px;
-    }
+}
 
 
 #menu ul {
     text-align: right;
-        }
+}
+
+#menu ul li a {
+    text-decoration: bold;
+	color: #000099;
+	box-shadow: 0.5px 0.5px 1px #66CCFF;
+}
+
+#menu ul li a:hover {
+	color: #0066CC;
+	box-shadow: 0.5px 0.5px 1px #99FFFF;
+}
+
+#menu ul li a:active {
+	background-color: #99CCFF;
+}
+
+#content {
+	width: 600px;
+	padding: 0 10px;
+}
+#content h1 {
+    color: #000066;
+}

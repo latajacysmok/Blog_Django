@@ -14,4 +14,5 @@ urlpatterns = [
     url(r'^tag/(?P<name>\w+)/$', views.tag_view, name="tag_view"),
     url(r'^profile/(?P<name>\w+)/$', views.user_name, name="user_name"),
     url(r'^post/(?P<name>\w+)/$', views.post_view, name="post_view"),
+    url(r'^(?P<question_id>\d+)/votes$', views.vote, name="vote"),
 ]

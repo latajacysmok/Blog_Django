@@ -1,10 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<div>
+	<h2>{% block title %} {% endblock %}</h2>
+    <h4>Opublikowany</h4>
+		{% if not edit_post %}
+			{% block publish_date %} {% endblock %}
+		{% else %}
+			{% block post.edit_date %} {% endblock %}
+		{% endif %}
 
-</body>
-</html>
+	<p> {{ post.content }}</p>
+	<p> Tagi:
+		{% for tag in post.tags %}
+			<a href="{% url 'tag_view' tag.name %}">#{{ tag.name }}</a>
+		{% endfor %}
+	</p>
+	<form action = "" method="POST">
+    {% csrf_token %}
+    {% for choice in question.choice_set.all %}
+        <input type="radio" name="choice" id="choice{{forloop.counter}}" value = "{{choice.id}}"/>
+        <label for="choice{{forloop.counter}}"> {{choice.choice_text}} </label> <br>
+    {% endfor %}
+    {% if user.is_authenticated %}
+
+    <input type="submit" value="vote"/>
+
+    {% endif %}
+	</form>
+</div>

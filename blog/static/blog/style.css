@@ -11,8 +11,10 @@ body {
 }
 
 #header, #footer {
-	background: #aaa;
+	background: #D3D3D3;
 	margin: 0;
+	padding-bottom: 3px;
+	box-shadow: 0.5px 0.5px 1px #9E9E9E;
 }
 
 #headerContent, #footerContent {
@@ -53,11 +55,6 @@ body {
 
 #menu ul {
 	list-style-type: none;
-}
-
-#content {
-	width: 600px;
-	padding: 0 10px;
 }
 
 #menu #hello {

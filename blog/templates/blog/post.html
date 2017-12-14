@@ -13,4 +13,16 @@
 			<a href="{% url 'tag_view' tag.name %}">#{{ tag.name }}</a>
 		{% endfor %}
 	</p>
+	<form action = "{% url 'polls:vote' question.id %}" method="post">
+    {% csrf_token %}
+    {% for choice in question.choice_set.all %}
+        <input type="radio" name="choice" id="choice{{forloop.counter}}" value = "{{choice.id}}"/>
+        <label for="choice{{forloop.counter}}"> {{choice.choice_text}} </label> <br>
+    {% endfor %}
+    {% if user.is_authenticated %}
+
+    <input type="submit" value="vote"/>
+
+    {% endif %}
+	</form>
 </div>
