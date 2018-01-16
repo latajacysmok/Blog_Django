@@ -1,12 +1,14 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 import datetime
-from .models import Post, Tag, User
-from .forms import PostForm, OurSignupForm
+from .models import Post, Tag, User, Profile
+from .forms import PostForm, OurSignupForm, ProfileForm
 from project.settings import POSTS_PER_PAGE
 #from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
+from django.db.models.signals import post_save
+
 
 def index(request, page='1'):
 	page = int(page)
@@ -36,7 +38,7 @@ def add_new_post(request):
 			post.save()
 			post.tags.add(*tags)
 			post.save()
-			messages.success(request, 'Utworzył się nowy post o tytule {}'.format(title)) # wiadomość o nowym poście
+			messages.success(request, 'Utworzyl sie nowy post o tytule {}'.format(title))
 			return HttpResponseRedirect('/')
 
 	form = PostForm()
@@ -112,3 +114,30 @@ def signup(request):
 	}
 	return render(request, 'registration/signup.html', context)
 
+
+def edit_profile(request):
+	profile = Profile.objects.get(user=request.user)
+	if request.method == 'POST':
+		form = ProfileForm(request.POST, request.FILES)
+		if form.is_valid():
+			profile.description = form.cleaned_data['description']
+			profile.avatar = form.cleaned_data['avatar']
+			profile.save()
+			return HttpResponseRedirect('/')
+	else:
+		form = ProfileForm(initial={
+			'description': profile.description,
+		})
+		context = {
+			'form': form,
+			'profile': profile
+		}
+		return render(request, 'blog/editprofile.html', context)
+
+def create_profile(sender, **kwargs):
+	user = kwargs['instance']
+	if kwargs['created']:
+		profile = Profile(user=user)
+		profile.save()
+
+post_save.connect(create_profile, sender=User)
