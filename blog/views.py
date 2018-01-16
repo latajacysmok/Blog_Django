@@ -1,8 +1,8 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 import datetime
-from .models import Post, Tag, User, Profile
-from .forms import PostForm, OurSignupForm, ProfileForm
+from .models import Post, Tag, User, Profile, Comment
+from .forms import PostForm, OurSignupForm, ProfileForm, CommentForm
 from project.settings import POSTS_PER_PAGE
 #from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
@@ -17,6 +17,8 @@ def index(request, page='1'):
 	endPost = page * POSTS_PER_PAGE
 	if startPost > len(posts):
 		raise Http404
+	for post in posts:
+		post.comments = Comment.objects.filter(post=post)
 	context = {
 		'posts' : posts[startPost:endPost],
 		'page' : page,
@@ -82,8 +84,8 @@ def tag_view(request, name):
 	return render(request, 'blog/tag_view.html', context)
 
 def user_name(request, name):
-	profile = User.objects.get(username=name)
-	posts = Post.objects.filter(user=profile)
+	profile = Profile.objects.get(user=request.user)
+	posts = Post.objects.filter(user=request.user)
 	print(posts)
 	context = {
 		'profile': profile,
@@ -113,6 +115,23 @@ def signup(request):
 		'form': form
 	}
 	return render(request, 'registration/signup.html', context)
+
+def add_new_comment(request, id):
+	post = Post.objects.get(id=int(id))
+	if request.method == 'POST':
+		form = CommentForm(request.POST)
+		if form.is_valid():
+			content = form.cleaned_data['content']
+			comment = Comment(post=post, content=content)
+			comment.save()
+			return HttpResponseRedirect('/')
+	else:
+		form = CommentForm()
+		context = {
+			'form': form,
+			'post': post
+		}
+		return render(request, 'blog/add_new_comment.html', context)
 
 
 def edit_profile(request):

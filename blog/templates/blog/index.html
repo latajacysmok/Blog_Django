@@ -31,6 +31,15 @@
 		 			{% endif %}
 		 		</h4>
 				<p> {{ post.content }}</p>
+				<h3> Komentarze </h3>
+				<ul>
+					{% for comment in post.comments %}
+						<li>
+							{{ comment.content }}
+						</li>
+					{% endfor %}
+				</ul>
+				<p><a href="{% url 'add_new_comment' post.id %}">Dodaj komentarz</a></p>
 				{% if post.tags %}
 					<p> Tagi: 
 						{% for tag in post.tags.all %}

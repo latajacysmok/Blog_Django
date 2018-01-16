@@ -15,7 +15,11 @@
                 {{ form.as_table }}
                 <tr>
                     <td></td>
-                    <td><img src='{{ profile.avatar.url|slice:"4:" }}'></td>
+                    <td>
+                    {% if profile.avatar.url != 'blog/static/blog/imgs/default.svg' %}
+                        <img src='{{ profile.avatar.url|slice:"4:" }}'>
+                    {% endif %}
+                    </td>
                 </tr>
                  <tr>
                     <td></td>

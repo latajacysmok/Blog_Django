@@ -32,7 +32,7 @@
 		
 		<div id="menu">
 			{% if user.is_authenticated %}
-			<div id="hello">Witaj, <strong>{{ user.username }}</strong>.</div>
+			<div id="hello">Witaj, <strong><a href="{% url 'user_name' user.username %}">{{ user.username }}</a></strong>.</div>
 			{% endif %}
 			<ul>
 				<li><a href="{% url 'index' %}">Strona glowna</a></li>

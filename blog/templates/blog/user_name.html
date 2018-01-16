@@ -6,14 +6,14 @@
 <p> Email: <strong>{{ profile.email }}</strong>.</p>
 <p> Data dolaczenia: <strong>{{ profile.date_joined }}</strong> </p>
 <p> Data ostatniego logowania: <strong>{{ profile.last_login }}</strong> </p>
-{% if not profile.about == None %}
-	<p> O mnie: <p>{{ profile.about }} </p> </p>
+{% if not profile.description == None %}
+	<p> O mnie: <p>{{ profile.description }} </p> </p>
 {% endif %}
 <div> 
-	{% if user.avar == None %}
+	{% if profile.avatar == None %}
 		<img width='100' height="100" src="https://image.flaticon.com/icons/svg/1/1247.svg" />
 	{% else %}
-		<img width='100' height="100" src="{{ user.avatar }}" />
+		<img width='100' height="100" src='{{  profile.avatar.url|slice:"4:" }}' />
 	{% endif %}	
 	
 </div>
