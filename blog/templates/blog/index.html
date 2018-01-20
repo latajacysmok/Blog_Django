@@ -1,0 +1,64 @@
+{% extends 'blog/base.html' %}
+
+{% block head %}
+	<title>Strona glowna</title>
+	{% load static %}
+	<link rel=stylesheet type="text/css" href="{% static 'blog/index.css' %}">
+{% endblock %}
+
+{% block content %}
+	
+	{% if messages %}
+	  			<ul class="messages">
+	    			{% for message in messages %}
+	      				<li class="{{ message.tags }}">{{ message }}</li>
+	    			{% endfor %}
+	 		 	</ul>
+	{% endif %}
+
+	<h1>Najnowsze posty na naszej stronie</h1>
+	<div id="posts">
+		{% for post in posts %}
+			<div class="post">
+				<a href="{% url 'post_view' post.id %}"><h2>{{ post.title }}</h2></a>
+				<h4>Opublikowany  {{ post.publish_date }}
+					{% if post.edit_date %}
+					, edytowany ostatnio {{ post.edit_date }}
+					{% endif %}
+		 			przez <a href="{% url 'user_name' post.user.username %}">{{ post.user.username }}<a/>
+		 			{% if post.user.username == user.username %}
+		 				 | <a href="{% url 'edit_post' post.id %}">edytuj</a>
+		 			{% endif %}
+		 		</h4>
+				<p> {{ post.content }}</p>
+				<h3> Komentarze </h3>
+				<ul>
+					{% for comment in post.comments %}
+						<li>
+							{{ comment.content }}
+						</li>
+					{% endfor %}
+				</ul>
+				<p><a href="{% url 'add_new_comment' post.id %}">Dodaj komentarz</a></p>
+				{% if post.tags %}
+					<p> Tagi: 
+						{% for tag in post.tags.all %}
+							<a href="{% url 'tag_view' tag.name %}">#{{ tag.name }}</a>
+						{% endfor %}
+					</p>
+				{% endif %}
+			</div>
+		{% endfor %}
+	</div>
+	<div id="pageSelect">
+		<div>
+			{% if not isFirst %}
+				<a href="{% url 'index' prevPage %}"> << </a>
+			{% endif %}
+			{{ page }}
+			{% if not isLast %}
+				<a href="{% url 'index' nextPage %}"> >> </a> 
+			{% endif %}
+		</div>
+	</div>
+{% endblock %}

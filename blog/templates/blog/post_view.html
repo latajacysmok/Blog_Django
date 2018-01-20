@@ -1,0 +1,37 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+
+<div class="post">
+    <h2>{{ posts.title }}</h2>
+        <h4>Opublikowany  {{ posts.publish_date }}
+					{% if posts.edit_date %}
+					, edytowany ostatnio {{ posts.edit_date }}
+					{% endif %}
+		 			przez <a href="{% url 'user_name' posts.user.username %}">{{ posts.user.username }}<a/>
+		 			{% if posts.user.username == user.username %}
+		 				 | <a href="{% url 'edit_post' post.id %}">edytuj</a>
+		 			{% endif %}
+        </h4>
+        <p> {{ posts.content }}</p>
+
+    <h3> Komentarze </h3>
+				<ul>
+					{% for comment in posts.comments %}
+						<li>
+							{{ comment.content }}
+						</li>
+					{% endfor %}
+				</ul>
+				<p><a href="{% url 'add_new_comment' posts.id %}">Dodaj komentarz</a></p>
+				{% if posts.tags %}
+					<p> Tagi:
+						{% for tag in posts.tags.all %}
+							<a href="{% url 'tag_view' tag.name %}">#{{ tag.name }}</a>
+						{% endfor %}
+					</p>
+				{% endif %}
+
+</div>
+
+{% endblock %}

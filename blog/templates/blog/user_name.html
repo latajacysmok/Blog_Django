@@ -1,0 +1,52 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+
+<h1>Profil uzytkownika {{ profile.username }}</h1>
+<p> Email: <strong>{{ profile.email }}</strong>.</p>
+<p> Data dolaczenia: <strong>{{ profile.date_joined }}</strong> </p>
+<p> Data ostatniego logowania: <strong>{{ profile.last_login }}</strong> </p>
+{% if not profile.description == None %}
+	<p> O mnie: <p>{{ profile.description }} </p> </p>
+{% endif %}
+<div> 
+	{% if profile.avatar == None %}
+		<img width='100' height="100" src="https://image.flaticon.com/icons/svg/1/1247.svg" />
+	{% else %}
+		<img width='100' height="100" src='{{  profile.avatar.url|slice:"4:" }}' />
+	{% endif %}	
+	
+</div>
+
+<div>
+
+	{% if profile.gender != None %}
+		<p> Płeć: <strong>{{ profile.gender }}</strong>.</p>
+	{% elif profile.age != None %}
+		<p> Wiek: <strong>{{ profile.age }}</strong>.</p>
+	{% elif profile.aboutMe != None %}
+		<p> O mnie: <strong>{{ profile.aboutMe }}</strong>.</p>
+	{% elif profile.city != None %}
+		<p> Miasto z którego pochodzę: <strong>{{ profile.city }}</strong>.</p>
+	{% elif profile.country != None %}
+		<p> Państwo z którego pochodzę: <strong>{{ profile.country }}</strong>.</p>
+	{% endif %}
+
+</div>
+
+<h2> Lista wszystkich postow: </h2>
+	{% for post in posts %}
+		<div>
+			<h2>{{ post.title }}</h2>
+			<h4>Opublikowany  {{ post.publish_date }} 
+	 			przez <a href="{% url 'user_name' post.user.username %}">{{ post.user.username }}</h4></a>
+			<p> {{ post.content }}</p>
+			<p> Tagi: 
+				{% for tag in post.tags.all %}
+					<a href="{% url 'tag_view' tag.name %}">#{{ tag.name }}</a>
+				{% endfor %}
+			</p>
+		</div>
+	{% endfor %}
+
+{% endblock %}
