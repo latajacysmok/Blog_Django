@@ -127,3 +127,5 @@ POSTS_PER_PAGE = 10
 
 EMAIL_TO_SEND = 'piternet.piotr@gmail.com'
 EMAIL_PORT = 1025
+
+# python -m smtpd -n -c DebuggingServer localhost:1025
