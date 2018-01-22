@@ -124,3 +124,6 @@ LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
 POSTS_PER_PAGE = 10
+
+EMAIL_TO_SEND = 'piternet.piotr@gmail.com'
+EMAIL_PORT = 1025

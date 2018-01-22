@@ -16,4 +16,5 @@ urlpatterns = [
     url(r'^post/(?P<name>\w+)/$', views.post_view, name="post_view"),
     url(r'^edit_profile/$', views.edit_profile, name='edit_profile'),
     url(r'^add_new_comment/(?P<id>\d+)/$', views.add_new_comment, name="add_new_comment"),
+    url(r'^contact/$', views.contact, name="contact"),
 ]

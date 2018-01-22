@@ -21,6 +21,7 @@
 					<li><a href="{% url 'index' %}">Strona glowna</a></li>
 					<li><a href="{% url 'add_new_post' %}">Dodaj nowy post</a></li>
 					<li><a href="{% url 'edit_profile' %}">Edycja profilu</a></li>
+					<li><a href="{% url 'contact' %}">Kontakt</a></li>
 					<li><a href="{% url 'logout' %}">Wyloguj się</a></li>
 				{% endif %}
 			</ul>
@@ -42,6 +43,7 @@
 				{% else %}
 					<li><a href="{% url 'add_new_post' %}">Dodaj nowy post</a></li>
 					<li><a href="{% url 'edit_profile' %}">Edycja profilu</a></li>
+					<li><a href="{% url 'contact' %}">Kontakt</a></li>
 					<li><a href="{% url 'logout' %}">Wyloguj się</a></li>
 				{% endif %}
 			</ul>

@@ -2,13 +2,13 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 import datetime
 from .models import Post, Tag, User, Profile, Comment
-from .forms import PostForm, OurSignupForm, ProfileForm, CommentForm
-from project.settings import POSTS_PER_PAGE
+from .forms import PostForm, OurSignupForm, ProfileForm, CommentForm, ContactForm
+from project.settings import POSTS_PER_PAGE, EMAIL_TO_SEND
 #from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.db.models.signals import post_save
-
+from django.core.mail import send_mail
 
 def index(request, page='1'):
 	page = int(page)
@@ -133,6 +133,23 @@ def add_new_comment(request, id):
 		}
 		return render(request, 'blog/add_new_comment.html', context)
 
+def contact(request):
+	if request.method == 'POST':
+		form = ContactForm(data=request.POST)
+		if form.is_valid():
+			title = form.cleaned_data['title']
+			content = form.cleaned_data['content']
+			email_from = form.cleaned_data['email']
+			send_mail(title, content, email_from, [EMAIL_TO_SEND], fail_silently=False)
+			return HttpResponseRedirect('/')
+	else:
+		form = ContactForm(initial={
+			'email': request.user.email
+		})
+		context = {
+			'form': form
+		}
+		return render(request, 'blog/contact.html', context)
 
 def edit_profile(request):
 	profile = Profile.objects.get(user=request.user)

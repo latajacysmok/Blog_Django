@@ -34,3 +34,8 @@ class CommentForm(forms.ModelForm):
 		widgets = {
 			'content': forms.Textarea(attrs={'cols': 40, 'rows': 15 })
 		}
+
+class ContactForm(forms.Form):
+	title = forms.CharField(label="Tytul", max_length=100)
+	email = forms.EmailField(label="Twoj email")
+	content = forms.CharField(label="Tresc", max_length=10000, widget=forms.Textarea(attrs={'cols': 30, 'rows': 10}))
