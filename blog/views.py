@@ -83,10 +83,9 @@ def tag_view(request, name):
 	}
 	return render(request, 'blog/tag_view.html', context)
 
-def user_name(request, name):
-	profile = Profile.objects.get(user=request.user)
-	posts = Post.objects.filter(user=request.user)
-	print(posts)
+def view_profile(request, id):
+	profile = Profile.objects.get(user_id=id)
+	posts = Post.objects.filter(user=profile.user)
 	context = {
 		'profile': profile,
 		'posts': posts
@@ -170,10 +169,11 @@ def edit_profile(request):
 		}
 		return render(request, 'blog/editprofile.html', context)
 
+
 def create_profile(sender, **kwargs):
 	user = kwargs['instance']
 	if kwargs['created']:
 		profile = Profile(user=user)
 		profile.save()
 
-post_save.connect(create_profile, sender=User)
+post_save.connect(create_profile, sender=User) # WAZNE
