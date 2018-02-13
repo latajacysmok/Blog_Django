@@ -25,12 +25,20 @@
 					{% if post.edit_date %}
 					, edytowany ostatnio {{ post.edit_date }}
 					{% endif %}
-		 			przez <a href="{% url 'user_name' post.user.username %}">{{ post.user.username }}<a/>
+		 			przez <a href="{% url 'view_profile' post.user.id %}">{{ post.user.username }}<a/>
 		 			{% if post.user.username == user.username %}
 		 				 | <a href="{% url 'edit_post' post.id %}">edytuj</a>
 		 			{% endif %}
 		 		</h4>
 				<p> {{ post.content }}</p>
+				<h4>
+					{{ post.likes_text }} | 
+					{% if not user in post.user_likes %}
+						<a href="{% url 'add_like' post.id %}">Lubię to</a> 
+					{% else %}
+						<a href="{% url 'del_like' post.id %}">Nie lubię tego</a> 
+					{% endif %}
+				</h4>
 				<h3> Komentarze </h3>
 				<ul>
 					{% for comment in post.comments %}

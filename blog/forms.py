@@ -35,6 +35,11 @@ class CommentForm(forms.ModelForm):
 			'content': forms.Textarea(attrs={'cols': 40, 'rows': 15 })
 		}
 
+class TagForm(forms.ModelForm):
+	class Meta:
+		model = Tag
+		fields = ['name']
+
 class ContactForm(forms.Form):
 	title = forms.CharField(label="Tytul", max_length=100)
 	email = forms.EmailField(label="Twoj email")

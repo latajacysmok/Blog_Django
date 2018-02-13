@@ -28,7 +28,34 @@ class Post(models.Model):
 		return "Tytul postu: " + self.title + "\n Tresc: " + self.content[:self.content.find('.')] + "..." \
 		+ "\nData: " + self.publish_date.strftime("%d.%m.%Y") + "\nAutor:" + self.user.username
 
+	def likes_count(self):
+		likes = Like.objects.filter(post=self)
+		return len(likes)
+
+	def user_likes(self):
+		likes = Like.objects.filter(post=self)
+		return [l.user for l in likes]
+
+	def likes_text(self):
+		count = self.likes_count()
+		if count == 0:
+			return "0 osób lubi to"
+		elif count == 1:
+			return "1 osoba lubi to"
+		elif count >= 2 and count <= 4:
+			return str(count) + " osoby lubią to"
+		else:
+			return str(count) + " osób lubi to"
+
+
 
 class Comment(models.Model):
 	content = models.CharField(max_length=300)
 	post = models.ForeignKey(Post)
+
+class Like(models.Model):
+	post  = models.ForeignKey(Post)
+	user = models.ForeignKey(User)
+
+	class Meta:
+		unique_together = ('post', 'user')

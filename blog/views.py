@@ -1,14 +1,17 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 import datetime
-from .models import Post, Tag, User, Profile, Comment
-from .forms import PostForm, OurSignupForm, ProfileForm, CommentForm, ContactForm
+from .models import Post, Tag, User, Profile, Comment, Like
+from .forms import PostForm, OurSignupForm, ProfileForm, CommentForm, ContactForm, TagForm
 from project.settings import POSTS_PER_PAGE, EMAIL_TO_SEND
 #from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.db.models.signals import post_save
 from django.core.mail import send_mail
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.admin.views.decorators import staff_member_required
+
 
 def index(request, page='1'):
 	page = int(page)
@@ -115,6 +118,7 @@ def signup(request):
 	}
 	return render(request, 'registration/signup.html', context)
 
+@login_required(login_url='/login?redirect=1/')
 def add_new_comment(request, id):
 	post = Post.objects.get(id=int(id))
 	if request.method == 'POST':
@@ -132,6 +136,10 @@ def add_new_comment(request, id):
 		}
 		return render(request, 'blog/add_new_comment.html', context)
 
+def check_if_first_letter(request):
+	return request.username[0] == 'a'
+
+@user_passes_test(check_if_first_letter, login_url="/login/")
 def contact(request):
 	if request.method == 'POST':
 		form = ContactForm(data=request.POST)
@@ -169,6 +177,32 @@ def edit_profile(request):
 		}
 		return render(request, 'blog/editprofile.html', context)
 
+
+def add_like(request, id):
+	post = Post.objects.get(id=int(id))
+	like = Like(post=post, user=request.user)
+	like.save()
+	return redirect('index')
+
+def del_like(request, id):
+	post = Post.objects.get(id=int(id))
+	like = Like.objects.get(post=post, user=request.user)
+	like.delete()
+	return redirect('index')
+
+@staff_member_required
+def add_new_tag(request):
+	if request.method == 'POST':
+		form = TagForm(request.POST)
+		if form.is_valid():
+			tag = form.save()
+			messages.success(request, 'Utworzyl sie nowy tag o tytule {}'.format(tag.name))
+			return redirect('index')
+	form = TagForm()
+	context = {
+		"form": form
+	}
+	return render(request, 'blog/add_new_tag.html', context)
 
 def create_profile(sender, **kwargs):
 	user = kwargs['instance']
