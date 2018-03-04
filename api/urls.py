@@ -5,4 +5,5 @@ from . import views
 urlpatterns = [
 	url(r'^users/$', views.UserList.as_view()),
 	url(r'^users/(?P<username>\w+)/$', views.UserDetail.as_view()),
+	url(r'^entries/$', views.EntryList.as_view()),
 ]

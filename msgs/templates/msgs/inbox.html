@@ -1,0 +1,26 @@
+{% extends 'blog/base.html' %}
+
+{% block head %}
+	<title>Poczta przychodzaca</title>
+{% endblock %}
+
+{% block header %}
+	<h1>Poczta przychodzaca</h1>
+{% endblock %}
+
+{% block content %}
+<div>
+
+	<h4>ostatnie logowanie bylo: {{logindate}}</h4>
+	{% for msg in messages %}
+		<div style="border: 1px dotted black; padding: 10px;">
+			<h3>{{msg.title}}</h3>
+			<p style="font-size: 80%;">Wysłana {{msg.message_date}} przez {{ msg.sender }}</p>
+			<p>
+				{{ msg.content }}
+			</p>
+		</div>
+	{% endfor %}
+</div>
+
+{% endblock %}

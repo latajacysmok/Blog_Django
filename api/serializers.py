@@ -16,3 +16,9 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
         
+
+class PostSerializer(serializers.ModelSerializer):
+
+	class Meta:
+		model = Post
+		fields = ('title', 'content', 'publish_date')

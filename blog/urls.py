@@ -20,5 +20,6 @@ urlpatterns = [
     url(r'^add_like/(?P<id>\d+)/$', views.add_like, name="add_like"),
     url(r'^del_like/(?P<id>\d+)/$', views.del_like, name="del_like"),
     url(r'^contact/$', views.contact, name="contact"),
+    url(r'^messages/', include('msgs.urls')),
     url(r'^api/', include('api.urls')),
 ]

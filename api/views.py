@@ -2,10 +2,9 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import UserSerializer
+from .serializers import UserSerializer, PostSerializer
 from blog.models import Post, Tag, Comment, Profile
 from django.contrib.auth.models import User
-
 
 class UserList(APIView):
 	def get(self, request, format=None):
@@ -14,8 +13,8 @@ class UserList(APIView):
 		return Response(serializer.data)
 
 	def post(self, request, format=None):
-		serializer = UserSerializer(data=request.data)
 		print(request.data)
+		serializer = UserSerializer(data=request.data)
 		if serializer.is_valid():
 			serializer.save()
 			return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -23,6 +22,12 @@ class UserList(APIView):
 
 	def delete(self, request, format=None):
 		pass
+
+class EntryList(APIView):
+	def get(self, request, format=None):
+		entries = Post.objects.all()
+		serializer = PostSerializer(entries, many=True)
+		return Response(serializer.data)
 
 class UserDetail(APIView):
 	def get(self, request, username, format=None):

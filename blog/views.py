@@ -11,7 +11,7 @@ from django.db.models.signals import post_save
 from django.core.mail import send_mail
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.admin.views.decorators import staff_member_required
-
+import requests	
 
 def index(request, page='1'):
 	page = int(page)
@@ -22,6 +22,12 @@ def index(request, page='1'):
 		raise Http404
 	for post in posts:
 		post.comments = Comment.objects.filter(post=post)
+
+	r = requests.get('https://api.fixer.io/latest?base=EUR')
+	if r.status_code == 200:
+		data = r.json()
+	currency = 'PLN'
+	welcomeText = "Kurs euro wynosi dzis: " + str(data['rates'][currency])
 	context = {
 		'posts' : posts[startPost:endPost],
 		'page' : page,
@@ -29,7 +35,10 @@ def index(request, page='1'):
 		'isLast': endPost >= len(posts),
 		'nextPage': page+1,
 		'prevPage': page-1,
+		'welcomeText': welcomeText,
 	}
+
+	
 	return render(request, 'blog/index.html', context)
 
 def add_new_post(request):
